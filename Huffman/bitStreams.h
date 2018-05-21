@@ -19,6 +19,7 @@ public:
 	void decode(unsigned char byte);
 	int putBit(unsigned int bit);
 	int putByte(unsigned char byte);
+	void putCount(unsigned int count);
 	int getBit();
 	int getByte();
 	void flush();
@@ -57,15 +58,17 @@ inline bitStreams::bitStreams(std::string filename)
 }
 inline bitStreams::bitStreams(std::string filename, bool bin)
 {
-	fout.open(filename, std::fstream::out | std::fstream::in);
-	numBitsIn_ = 0;
-	numBitsOut_ = 0;
-	bufferIn_ = '\0';
-	bufferOut_ = '\0';
-	root_->data = '\0';
-	root_->left = nullptr;
-	root_->right = nullptr;
-	placeHolder_ = root_;
+	if (bin) {
+		fout.open(filename, std::fstream::out | std::fstream::in);
+		numBitsIn_ = 0;
+		numBitsOut_ = 0;
+		bufferIn_ = '\0';
+		bufferOut_ = '\0';
+		root_->data = '\0';
+		root_->left = nullptr;
+		root_->right = nullptr;
+		placeHolder_ = root_;
+	}
 }
 inline void bitStreams::rebuild(unsigned long long pattern, unsigned char data_, unsigned char bitcount)
 {
@@ -103,8 +106,6 @@ inline void bitStreams::rebuild(unsigned long long pattern, unsigned char data_,
 
 inline void bitStreams::decode(unsigned char byte)
 {
-
-	int temp = 0;
 	location() = 7;
 	bufferIn() = byte;
 	while (location() >= 0) {
@@ -118,8 +119,6 @@ inline void bitStreams::decode(unsigned char byte)
 			}
 		}
 		else {
-			//if (!placeHolder()->left)
-			//	return;
 			if (placeHolder()->left) {
 				placeHolder() = placeHolder()->left;
 				if (placeHolder()->data != '\0') {
@@ -156,16 +155,13 @@ inline int bitStreams::putByte(unsigned char byte)
 	return 0;
 }
 
+inline void bitStreams::putCount(unsigned int count)
+{
+	fout << count;
+}
+
 inline int bitStreams::getBit()
 {
-	//bufferOut() = fout.get();
-	//++numBitsOut();
-	//if (numBitsOut() == 0) {
-	//	numBitsOut() = 8;
-	//	bufferIn() = getByte();
-	//	return bufferOut();
-	//}
-	//return bufferIn();
 	int temp = 0;
 	if ((bufferOut() & (1 << location())) >> location())
 		return temp | 1;

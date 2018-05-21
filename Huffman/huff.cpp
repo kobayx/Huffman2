@@ -66,9 +66,7 @@ int main() {
 		item<unsigned char, int>* Que = new item<unsigned char, int>(itm.first, itm.second);
 		PQheap.push(Que, itm.second);
 	}
-//	dump(count);
 	makeHuff(PQheap);
-//	Q.dump(Q.heap[0]->data(), 10);
 	PQheap.buildCStable(PQheap.heap[0]->data());
 
 	fin.open("words.txt", fstream::in);
@@ -102,7 +100,6 @@ int main() {
 	cnt = 0;
 	while (cnt < 256) {
 		bitcount = fin.get();
-//		if (bitcount > 0) {
 		unsigned char bytes = ceil(bitcount / 8.);
 		byte = bytes;
 		for (unsigned char j = 0; j < bytes; ++j) {
@@ -122,8 +119,6 @@ int main() {
 		data_ = cnt;
 		bitcount = T.first;
 		pattern = T.second;
-		if(pattern == 940)
-			cout << "stop" << endl;
 		if(bitcount != 0)
 			decypher.rebuild(pattern, data_, bitcount);
 		++cnt;

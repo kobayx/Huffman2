@@ -135,7 +135,7 @@ inline void Heap<Data, Priority>::sortUp(int a)
 	if (0 > ((a - 1) / 2))
 		return;
 	if (heap.size() > 1 && heap[(a - 1) / 2]->priority() > heap[a]->priority()) {
-		swap(heap[(a - 1) / 2], heap[a]);
+		std::swap(heap[(a - 1) / 2], heap[a]);
 		sortUp((a - 1) / 2);
 	}
 	return;
